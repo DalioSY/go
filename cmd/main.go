@@ -1,14 +1,33 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-api/controller"
+	"go-api/db"
+	"go-api/repository"
+	"go-api/usecase"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	app := gin.Default()
+	server := gin.Default()
 
-	app.GET("/", func (ctx *gin.Context) {
+	dbConnection, err := db.ConnectDB()
+	if err != nil {
+		panic(err)
+	}
+
+	ProductRepository := repository.NewProductRepository(dbConnection)
+	ProductUseCase := usecase.NewProductUseCase(ProductRepository)
+	ProductController := controller.NewProductController(ProductUseCase)
+
+	server.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
-			"message":"Hello",
+			"message": "Hello",
 		})
 	})
-	app.Run(":8000")
+	server.GET("/products", ProductController.GetProducts)
+	server.POST("/product", ProductController.CreateProduct)
+	server.GET("/product/:productId", ProductController.GetProductById)
+	server.Run(":8000")
 }
