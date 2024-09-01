@@ -11,7 +11,7 @@ const (
 	host     = "go_db"
 	port     = 5432
 	user     = "postgres"
-	password = "postgres"
+	password = "1234"
 	dbname   = "postgres"
 )
 

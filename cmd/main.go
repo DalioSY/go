@@ -21,7 +21,7 @@ func main() {
 	ProductUseCase := usecase.NewProductUseCase(ProductRepository)
 	ProductController := controller.NewProductController(ProductUseCase)
 
-	server.GET("/", func(ctx *gin.Context) {
+	server.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "Hello",
 		})
